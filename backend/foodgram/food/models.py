@@ -55,7 +55,7 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(to=Tag, verbose_name='Тэги', through='TagRecipe')
     pub_date = models.DateTimeField(
         verbose_name='Время публикации', auto_now_add=True)
-    cooking_duration = models.IntegerField(
+    cooking_time = models.IntegerField(
         verbose_name='Время приготовления в минутах',
         validators=[MinValueValidator(1)])
 
