@@ -5,8 +5,8 @@ from rest_framework import serializers
 from django.core import exceptions as django_exceptions
 from drf_base64.fields import Base64ImageField
 
-from food.models import Recipe, Ingredient, Tag, Recipe_ingredient, Favorite, \
-    Shopping_cart
+from food.models import Recipe, Ingredient, Tag, IngredientAmount, Favorite, \
+    ShoppingCart
 from users.models import User, Subscribe
 
 
@@ -240,7 +240,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
         source='ingredient.measurement_unit')
 
     class Meta:
-        model = Recipe_ingredient
+        model = IngredientAmount
         fields = ('id', 'name',
                   'measurement_unit', 'amount')
 
@@ -283,8 +283,8 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         @return: True, если рецепт добавлен в список покупок, иначе False
         """
         return (
-            self.context.get('request').user.is_authenticated
-            and Shopping_cart.objects.filter(
+                self.context.get('request').user.is_authenticated
+                and ShoppingCart.objects.filter(
                 user=self.context['request'].user,
                 recipe=obj).exists()
         )
@@ -295,7 +295,7 @@ class RecipeIngredientCreateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
 
     class Meta:
-        model = Recipe_ingredient
+        model = IngredientAmount
         fields = ('id', 'amount')
 
 
@@ -360,8 +360,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         """
 
         recipe.tags.set(tags)
-        Recipe_ingredient.objects.bulk_create(
-            [Recipe_ingredient(
+        IngredientAmount.objects.bulk_create(
+            [IngredientAmount(
                 recipe=recipe,
                 ingredient=Ingredient.objects.get(pk=ingredient['id']),
                 amount=ingredient['amount']
@@ -397,7 +397,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'cooking_time', instance.cooking_time)
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
-        Recipe_ingredient.objects.filter(
+        IngredientAmount.objects.filter(
             recipe=instance,
             ingredient__in=instance.ingredients.all()).delete()
         self.tags_and_ingredients_set(instance, tags, ingredients)

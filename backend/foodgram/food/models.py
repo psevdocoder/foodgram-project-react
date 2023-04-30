@@ -50,9 +50,9 @@ class Recipe(models.Model):
     image = models.ImageField(verbose_name='Картинка',
                               upload_to='recipes/', blank=True)
     ingredients = models.ManyToManyField(
-        to=Ingredient, through='Recipe_ingredient',
+        to=Ingredient, through='IngredientAmount',
         through_fields=('recipe', 'ingredient'), verbose_name='Ингредиенты')
-    tags = models.ManyToManyField(to=Tag, verbose_name='Тэги')
+    tags = models.ManyToManyField(to=Tag, verbose_name='Тэги', through='TagRecipe')
     pub_date = models.DateTimeField(
         verbose_name='Время публикации', auto_now_add=True)
     cooking_duration = models.IntegerField(
@@ -68,7 +68,30 @@ class Recipe(models.Model):
         return self.name
 
 
-class Recipe_ingredient(models.Model):
+class TagRecipe(models.Model):
+    """Кастомная модель связи тегов и рецепта"""
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        related_name='tags',
+        verbose_name='Наименование'
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='tags_ref',
+        verbose_name='Рецепт'
+    )
+
+    def __str__(self):
+        return f'{self.recipe}<-->{self.tag}'
+
+    class Meta:
+        verbose_name = 'Тэг в рецепте'
+        verbose_name_plural = 'Тэги в рецепте'
+
+
+class IngredientAmount(models.Model):
     recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE,
                                related_name='recipes',verbose_name='Рецепт')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE,
@@ -106,7 +129,7 @@ class Favorite(models.Model):
         return f'{self.user.username} - {self.recipe.name}'
 
 
-class Shopping_cart(models.Model):
+class ShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='shopping_user',
                              verbose_name='Добавил в корзину')
