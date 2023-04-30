@@ -27,14 +27,15 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name='Название', max_length=200, unique=True)
+        verbose_name='Название', max_length=200)
     measurement_unit = models.CharField(verbose_name='Единица измерения',
                                         max_length=20)
 
     class Meta:
         ordering = ['name']
-        verbose_name = ['Ингредиент']
-        verbose_name_plural = ['Ингредиенты']
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
+        unique_together = ('name', 'measurement_unit')
 
     def __str__(self):
         return f'{self.name}, {self.measurement_unit}'
@@ -43,6 +44,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     name = models.CharField(
         verbose_name='Название', max_length=200, unique=True)
+    text = models.TextField('Описание')
     author = models.ForeignKey(to=User, on_delete=models.CASCADE,
                                related_name='recipes', verbose_name='Автор')
     image = models.ImageField(verbose_name='Картинка',
