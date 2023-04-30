@@ -1,5 +1,7 @@
+import io
+
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets, status, filters
@@ -18,9 +20,6 @@ from food.models import Ingredient, Tag, Recipe, Favorite, ShoppingCart, \
     IngredientAmount
 from foodgram.settings import FILE_NAME
 from users.models import User, Subscribe
-
-
-"""================================= users ================================="""
 
 
 class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
@@ -118,9 +117,6 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
                               author=author).delete()
             return Response({'detail': 'Успешная отписка'},
                             status=status.HTTP_204_NO_CONTENT)
-
-
-"""================================= food =================================="""
 
 
 class IngredientViewSet(mixins.ListModelMixin,
@@ -222,26 +218,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
 
     @action(detail=False, methods=['get'],
-            permission_classes=(IsAuthenticated,))
-    def download_shopping_cart(self, request, **kwargs):
-        """
-        Возвращает файл с текстом, содержащим список покупок пользователя
-        :param request: запрос с данными
-        :param kwargs: параметры маршрута
-        :return: возвращает файл в формате 'text/plain'
-        """
-        ingredients = (
-            IngredientAmount.objects
-            .filter(recipe__shopping_recipe__user=request.user)
-            .values('ingredient')
-            .annotate(total_amount=Sum('amount'))
-            .values_list('ingredient__name', 'total_amount',
-                         'ingredient__measurement_unit')
-        )
-        file_list = []
-        [file_list.append(
-            '{} - {} {}.'.format(*ingredient)) for ingredient in ingredients]
-        file = HttpResponse('Список покупок:\n' + '\n'.join(file_list),
-                            content_type='text/plain')
-        file['Content-Disposition'] = f'attachment; filename={FILE_NAME}'
-        return file
+            permission_classes=[IsAuthenticated])
+    def download_shopping_cart(self, request):
+        user = request.user
+        purchases = ShoppingCart.objects.filter(user=user)
+        file = 'shopping-list.txt'
+        with open(file, 'w') as f:
+            shop_cart = dict()
+            for purchase in purchases:
+                ingredients = IngredientAmount.objects.filter(
+                    recipe=purchase.recipe.id
+                )
+                for r in ingredients:
+                    i = Ingredient.objects.get(pk=r.ingredient.id)
+                    point_name = f'{i.name} ({i.measurement_unit})'
+                    if point_name in shop_cart.keys():
+                        shop_cart[point_name] += r.amount
+                    else:
+                        shop_cart[point_name] = r.amount
+
+            for name, amount in shop_cart.items():
+                f.write(f'* {name} - {amount}\n')
+
+        return FileResponse(open(file, 'rb'), as_attachment=True)
