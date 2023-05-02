@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd foodgram-project-react/infra
-            sudo docker-compose down
+            sudo docker compose down
             rm .env
             sudo docker rmi foodgram-backend:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
@@ -72,7 +72,7 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo NGINX_HOST=${{ secrets.HOST }} >> .env
-            sudo docker-compose up -d --build
+            sudo docker compose up -d --build
 
   send_message:
     runs-on: ubuntu-latest
