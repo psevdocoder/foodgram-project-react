@@ -26,7 +26,7 @@ services:
     container_name: foodgram-backend
     restart: unless-stopped
     volumes:
-      - static_value:/app/foodgram/static/
+      - static_value:/app/foodgram/static_backend/
       - media_value:/app/foodgram/media/
     depends_on:
       - db
