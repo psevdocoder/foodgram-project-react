@@ -3,10 +3,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
 from django.db import transaction
 from drf_base64.fields import Base64ImageField
-from rest_framework import serializers
-
 from food.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                          ShoppingCart, Tag)
+from rest_framework import serializers
 from users.models import Subscribe, User
 
 

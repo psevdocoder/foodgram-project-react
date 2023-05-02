@@ -4,7 +4,6 @@ import os.path
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-
 from food.models import Ingredient
 
 

@@ -3,7 +3,6 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.text import slugify
 from unidecode import unidecode
-
 from users.models import User
 
 
