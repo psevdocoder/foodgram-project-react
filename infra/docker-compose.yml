@@ -5,6 +5,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+    container_name: foodgram-frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -21,7 +22,7 @@ services:
 
   backend:
     image: just55py/foodgram-backend:latest
-    container_name: react-backend
+    container_name: foodgram-backend
     restart: unless-stopped
     volumes:
       - static_value:/app/static/
