@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'rest_framework.authtoken',
+    'colorfield',
 
     # local apps
     'users',
