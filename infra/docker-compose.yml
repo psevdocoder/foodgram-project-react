@@ -44,6 +44,8 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
     restart: unless-stopped
+    env_file:
+      - ./.env
     depends_on:
       - frontend
 
