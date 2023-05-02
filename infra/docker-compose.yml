@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
-    env_file:
-      - ./.env
+    depends_on:
+      - backend
 
   db:
     image: postgres:13.0-alpine
