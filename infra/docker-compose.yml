@@ -20,7 +20,7 @@ services:
 
 
   backend:
-    image: just55py/react-backend:latest
+    image: just55py/foodgram-backend:latest
     container_name: react-backend
     restart: unless-stopped
     volumes:
