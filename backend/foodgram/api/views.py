@@ -1,10 +1,7 @@
-import io
-
-from django.db.models import Sum
-from django.http import HttpResponse, FileResponse
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, viewsets, status, filters
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -12,19 +9,20 @@ from rest_framework.response import Response
 from api.filter import RecipeFilter
 from api.pagination import CustomPaginator
 from api.permissions import IsAuthorOrReadOnly
-from api.serializers import UserReadSerializer, UserCreateSerializer, \
-    SetPasswordSerializer, SubscriptionsSerializer, \
-    SubscribeAuthorSerializer, IngredientSerializer, TagSerializer, \
-    RecipeReadSerializer, RecipeCreateSerializer, RecipeSerializer
+from api.serializers import (IngredientSerializer, RecipeCreateSerializer,
+                             RecipeReadSerializer, RecipeSerializer,
+                             SetPasswordSerializer, SubscribeAuthorSerializer,
+                             SubscriptionsSerializer, TagSerializer,
+                             UserCreateSerializer, UserReadSerializer)
 from api.utils import CreateDeleteMixin
-from food.models import Ingredient, Tag, Recipe, Favorite, ShoppingCart, \
-    IngredientAmount
-from foodgram.settings import FILE_NAME
-from users.models import User, Subscribe
+from food.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                         ShoppingCart, Tag)
+from users.models import Subscribe, User
 
 
 class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin, viewsets.GenericViewSet, CreateDeleteMixin):
+                  mixins.RetrieveModelMixin, viewsets.GenericViewSet,
+                  CreateDeleteMixin):
     """
     ViewSet для создания, получения списка и
     получения информации о пользователе.

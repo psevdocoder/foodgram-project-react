@@ -1,13 +1,13 @@
-from django.contrib.auth.password_validation import validate_password
-from django.db import transaction
 import djoser.serializers as djoser_serializers
-from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
+from django.db import transaction
 from drf_base64.fields import Base64ImageField
+from rest_framework import serializers
 
-from food.models import Recipe, Ingredient, Tag, IngredientAmount, Favorite, \
-    ShoppingCart
-from users.models import User, Subscribe
+from food.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                         ShoppingCart, Tag)
+from users.models import Subscribe, User
 
 
 class UserReadSerializer(djoser_serializers.UserSerializer):
@@ -16,7 +16,7 @@ class UserReadSerializer(djoser_serializers.UserSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'id', 'username','first_name', 'last_name',
+        fields = ('email', 'id', 'username', 'first_name', 'last_name',
                   'is_subscribed')
 
     def get_is_subscribed(self, obj):
@@ -276,10 +276,9 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         @return: True, если рецепт добавлен в список покупок, иначе False
         """
         return (
-                self.context.get('request').user.is_authenticated
-                and ShoppingCart.objects.filter(
-                user=self.context['request'].user,
-                recipe=obj).exists()
+            self.context.get('request').user.is_authenticated
+            and ShoppingCart.objects.filter(user=self.context['request'].user,
+                                            recipe=obj).exists()
         )
 
 

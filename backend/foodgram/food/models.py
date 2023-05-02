@@ -1,8 +1,8 @@
 from colorfield.fields import ColorField
 from django.core.validators import MinValueValidator
-from unidecode import unidecode
 from django.db import models
 from django.utils.text import slugify
+from unidecode import unidecode
 
 from users.models import User
 
@@ -53,7 +53,8 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         to=Ingredient, through='IngredientAmount',
         through_fields=('recipe', 'ingredient'), verbose_name='Ингредиенты')
-    tags = models.ManyToManyField(to=Tag, verbose_name='Тэги', through='TagRecipe')
+    tags = models.ManyToManyField(
+        to=Tag, verbose_name='Тэги', through='TagRecipe')
     pub_date = models.DateTimeField(
         verbose_name='Время публикации', auto_now_add=True)
     cooking_time = models.IntegerField(
@@ -93,8 +94,8 @@ class TagRecipe(models.Model):
 
 
 class IngredientAmount(models.Model):
-    recipe = models.ForeignKey(Recipe,on_delete=models.CASCADE,
-                               related_name='recipes',verbose_name='Рецепт')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               related_name='recipes', verbose_name='Рецепт')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE,
                                    related_name='ingredients',
                                    verbose_name='Ингредиент')
