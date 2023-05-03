@@ -1,8 +1,5 @@
 # praktikum_new_diplom
 [![Docker Image CI](https://github.com/psevdocoder/foodgram-project-react/actions/workflows/foodfram_workflow.yml/badge.svg)](https://github.com/psevdocoder/foodgram-project-react/actions/workflows/foodfram_workflow.yml)
-![Pull requests](https://img.shields.io/github/issues-pr-closed/psevdocoder/foodgram-project-react.svg)
-![Commit activity](https://img.shields.io/github/commit-activity/y/psevdocoder/foodgram-project-react)
-![Last commit](https://img.shields.io/github/last-commit/psevdocoder/foodgram-project-react)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-092E20?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
 [![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=flat&logo=django&logoColor=white&color=ff1709&labelColor=gray)](https://www.django-rest-framework.org/)
