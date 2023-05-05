@@ -10,4 +10,3 @@ psycopg2-binary==2.9.6
 Unidecode==1.3.6
 drf-base64==2.0
 django-templated-mail==1.1.1
-decouple==0.0.7
